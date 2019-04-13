@@ -12,7 +12,7 @@ async function main() {
   console.log(board.toString());
 
   board = board
-    .updatePiece(0, 0, PieceType.Circle)
+    .updatePiece(0, 0, PieceType.None)
     .updatePiece(0, 1, PieceType.None)
     .updatePiece(1, 0, PieceType.Circle)
     .updatePiece(1, 1, PieceType.None);
@@ -20,7 +20,9 @@ async function main() {
 
   const tree = buildTreeForPieceType(board, PieceType.Circle, PieceType.Square);
 
-  console.log(tree.map((x: TreeNode) => x.toString()).join('\n'));
+  const result = tree.map((x: TreeNode) => x.toString()).join('\n');
+
+  console.log(result);
 }
 
 // noinspection JSIgnoredPromiseFromCall

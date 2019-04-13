@@ -1,7 +1,6 @@
 import {PieceType} from '../models/enums/Type';
 import {IBoard} from '../models/interfaces/IBoard';
-
-type TestType = { flag: boolean; pieceType: PieceType };
+import {TestType} from "../models/types/TestType";
 
 /**
  * Forward diagonal test for win

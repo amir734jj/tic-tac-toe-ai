@@ -11,7 +11,7 @@ export class Move {
     this.pieceType = pieceType;
   }
 
-  public toString() {
+  public toString(): string {
     return `Attempt to set (${this.source.i}, ${this.source.j}) to ${EnumValues.getNameFromValue(PieceType, this.pieceType)}`;
   }
 }
