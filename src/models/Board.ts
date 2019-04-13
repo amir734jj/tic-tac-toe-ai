@@ -1,72 +1,111 @@
-import { Type } from './enums/Type';
-import { clone } from '../utilities/Clone';
-import { List } from 'immutable';
-import { EnumValues } from 'enum-values';
+import {EnumValues} from 'enum-values';
+import {List} from "immutable";
+import * as lodash from 'lodash';
+import {PieceType} from './enums/Type';
+import {IBoard} from './interfaces/IBoard';
+import {TypePiecePosition} from "./types/PiecePosition";
 
-type TypeMatrix = Type[][];
+type TypeMatrix = PieceType[][];
 
-export class Board {
-    public readonly Dimension: number = 3;
-    private _matrix: TypeMatrix;
-    private _history: List<TypeMatrix>;
+export class Board implements IBoard {
+  public readonly DIMENSION: number = 3;
+  private matrix: TypeMatrix;
 
-    constructor() {
-        // Initialize the board
-        this._matrix = [];
-        for(let i = 0; i < this.Dimension; i++) {
-            this._matrix[i] = [];
+  constructor(dimension: number, matrix?: TypeMatrix) {
+    this.DIMENSION = dimension;
 
-            for(let j = 0; j < this.Dimension; j++) {
-                this._matrix[i][j] = Type.None;
-            }
+    if (matrix) {
+      this.matrix = matrix;
+    } else {
+      // Initialize the board
+      this.matrix = [];
+      for (let i = 0; i < this.DIMENSION; i += 1) {
+        this.matrix[i] = [];
+
+        for (let j = 0; j < this.DIMENSION; j += 1) {
+          this.matrix[i][j] = PieceType.None;
         }
+      }
+    }
+  }
 
-        this._history = List();
+  /**
+   * Updates the board given indices
+   * @param i
+   * @param j
+   * @param pieceType
+   */
+  public updatePiece(i: number, j: number, pieceType: PieceType): IBoard {
+    if (!this.validate(i, j)) {
+      throw new Error("Invalid index")
     }
 
-    /**
-     * Updates the board given indices
-     * @param i
-     * @param j
-     * @param type
-     */
-    update(i: number, j: number, type: Type) {
-        if (!this.validate(i, j)) {
-            throw new Error("Invalid index")
+    const updatedBoard = lodash.cloneDeep(this.matrix);
+    updatedBoard[i][j] = pieceType;
+
+    return new Board(this.DIMENSION, updatedBoard);
+  }
+
+  /**
+   * Get board at index
+   * @param i
+   * @param j
+   */
+  public getPiece(i: number, j: number): PieceType {
+    if (!this.validate(i, j)) {
+      throw new Error("Invalid index")
+    }
+
+    return this.matrix[i][j];
+  }
+
+  /**
+   * Returns the row given number
+   * @param {number} i
+   * @returns {PieceType[]}
+   */
+  public row(i: number): PieceType[] {
+    return this.matrix[i];
+  }
+
+  /**
+   * Returns the column given number
+   * @param {number} j
+   * @returns {PieceType[]}
+   */
+  public column(j: number): PieceType[] {
+    return this.matrix.map((x: PieceType[]) => x[j]);
+  }
+
+  /**
+   * Returns the available positions
+   * @returns {{i: number; j: number}[]}
+   */
+  public availablePositions(): TypePiecePosition[] {
+    let result: List<TypePiecePosition> = List<TypePiecePosition>();
+    for (let i = 0; i < this.DIMENSION; i += 1) {
+      for (let j = 0; j < this.DIMENSION; j += 1) {
+        if (this.matrix[i][j] === PieceType.None) {
+          result = result.push({ i, j });
         }
-
-        this._history = this._history.push(this._matrix);
-
-        // Deep clone self
-        this._matrix = clone<TypeMatrix>(this._matrix);
-        this._matrix[i][j] = type;
+      }
     }
 
-    /**
-     * Get board at index
-     * @param i
-     * @param j
-     */
-    get(i: number, j: number) {
-        if (!this.validate(i, j)) {
-            throw new Error("Invalid index")
-        }
+    return result.toArray();
+  }
 
-        return this._matrix[i][j];
-    }
+  /**
+   * toString override
+   */
+  public toString(): string {
+    return `[\n${this.matrix.map((x: PieceType[]) => `\t${x.map((y: PieceType) => EnumValues.getNameFromValue(PieceType, y)).join(", ")}`).join('\n')}\n]`;
+  }
 
-    /**
-     * Validates indices
-     * @param index
-     */
-    private validate(...index: number[]) {
-        return index.reduce((x, y) => x && y >=0 && y < this.Dimension, true);
-    }
-
-    /**
-     * toString override
-     */
-    toString() {
-        return this._matrix.map(x => x.map(y => EnumValues.getNameFromValue(Type, y)).join(", ")).join("\n");
-    }
+  /**
+   * Validates indices
+   * @param index
+   */
+  private validate(...index: number[]) {
+    return index.reduce((x: boolean, y: number) => x && y >= 0 && y < this.DIMENSION, true);
+  }
 }

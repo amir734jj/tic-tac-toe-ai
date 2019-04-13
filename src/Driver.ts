@@ -4,9 +4,10 @@ import {Board} from "./models/Board";
 async function main() {
     console.log('Started ...');
 
-    let board = new Board();
+    const board = new Board(3);
     console.log(board.toString());
 }
 
+// noinspection JSIgnoredPromiseFromCall
 main();
 
