@@ -1,20 +1,14 @@
-import {EnumValues} from "enum-values";
-import {PieceType} from "./enums/Type";
-import {IBoard} from "./interfaces/IBoard";
-import {Move} from './Move';
-import {TestType} from "./types/TestType";
+import {IBoard} from '../interfaces/IBoard';
+import {Move} from '../Move';
+import {TestType} from "../types/TestType";
+import {SimpleNode} from "./SimpleNode";
 
-export class TreeNode {
-  public board: IBoard;
-  public testResult: TestType;
+export class TreeNode extends SimpleNode {
   public children: TreeNode[];
-  public move: Move;
 
-  constructor(board: IBoard, move: Move, children: TreeNode[], testResult: TestType) {
-    this.board = board;
-    this.move = move;
+  constructor(board: IBoard, move: Move, testResult: TestType, children: TreeNode[]) {
+    super(board, move, testResult);
     this.children = children;
-    this.testResult = testResult;
   }
 
   private static emptyString(depth: number) {
@@ -44,6 +38,6 @@ ${this.children.map((x: TreeNode) => `${TreeNode.emptyString(depth + 1)}${x.toSt
 
     };
 
-    return `${this.move.toString()} ${this.testResult.flag ? `; won: ${EnumValues.getNameFromValue(PieceType, this.testResult.pieceType)}` : ''}${printChildrenFunc()}`;
+    return `${super.toString()}${printChildrenFunc()}`;
   }
 }

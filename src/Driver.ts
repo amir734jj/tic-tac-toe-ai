@@ -1,8 +1,8 @@
-import {buildDecisionTreeForPieceType, shortedWinPath} from "./logic/BoardPredication";
-import {Board} from "./models/Board";
-import {PieceType} from "./models/enums/Type";
-import {IBoard} from "./models/interfaces/IBoard";
-import {TreeNode} from "./models/TreeNode";
+import {buildDecisionTreeForPieceType, shortedWinPath} from './logic/BoardPredication';
+import {Board} from './models/Board';
+import {PieceType} from './models/enums/Type';
+import {IBoard} from './models/interfaces/IBoard';
+import {TreeNode} from './models/nodes/TreeNode';
 
 // @ts-ignore
 async function main() {
@@ -19,9 +19,9 @@ async function main() {
 
 
   const trees = buildDecisionTreeForPieceType(board, PieceType.Circle, PieceType.Square);
-  // const shortedWinPathResult = shortedWinPath(trees);
+  const shortedWinPathResult = shortedWinPath(trees);
 
-  const result = trees.map((x: TreeNode) => x.toString()).join('\n');
+  const result = shortedWinPathResult.map((x: TreeNode) => x.toString()).join('\n');
 
   console.log(result);
 }

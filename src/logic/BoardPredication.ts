@@ -2,7 +2,8 @@ import * as lodash from 'lodash';
 import {PieceType} from '../models/enums/Type';
 import {IBoard} from '../models/interfaces/IBoard';
 import {Move} from '../models/Move';
-import {TreeNode} from '../models/TreeNode';
+import {SimpleNode} from "../models/nodes/SimpleNode";
+import {TreeNode} from '../models/nodes/TreeNode';
 import {TypePiecePosition} from '../models/types/PiecePosition';
 import {TestType} from '../models/types/TestType';
 import {boardTest} from './BoardLogic';
@@ -22,7 +23,7 @@ function buildDecisionTreeForPieceTypeHelper(board: IBoard, selfType: PieceType,
         const updatedBoard = board.updatePiece(position.i, position.j, selfType);
         const children = buildDecisionTreeForPieceTypeHelper(updatedBoard, otherType, selfType, depth + 1, testResults);
 
-        return new TreeNode(updatedBoard, move, children, testResults.get(updatedBoard));
+        return new TreeNode(updatedBoard, move, testResults.get(updatedBoard), children);
       });
   }
 }
@@ -44,10 +45,10 @@ function shortestWinPathHelper(previous: TreeNode[], treeNode: TreeNode): TreeNo
   }
 }
 
-export function shortedWinPath(paths: TreeNode[]): TreeNode[] {
+export function shortedWinPath(paths: TreeNode[]): SimpleNode[] {
   const result = lodash.sortBy(paths.map((x: TreeNode) => shortestWinPathHelper([], x)), (x: TreeNode[]) => x.length);
   if (result.length) {
-    return result[result.length - 1].map((x: TreeNode) => new TreeNode(x.board, x.move, [], x.testResult));
+    return result[result.length - 1].map((x: TreeNode) => new SimpleNode(x.board, x.move, x.testResult));
   } else{
     return [];
   }
