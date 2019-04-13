@@ -8,7 +8,7 @@ import {TreeNode} from './models/nodes/TreeNode';
 async function main() {
   console.log('Started ...');
 
-  let board: IBoard = new Board(10);
+  let board: IBoard = new Board(3);
   console.log(board.toString());
 
   board = board
@@ -18,7 +18,7 @@ async function main() {
     .updatePiece(1, 1, PieceType.None);
 
 
-  const trees = buildDecisionTreeForPieceType(board, PieceType.Circle, PieceType.Square);
+  const trees = buildDecisionTreeForPieceType(board, PieceType.Square, PieceType.Circle);
   const shortedWinPathResult = shortedWinPath(trees);
 
   const result = shortedWinPathResult.map((x: TreeNode) => x.toString()).join('\n');
