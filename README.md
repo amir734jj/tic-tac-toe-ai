@@ -2,7 +2,7 @@
 AI for tic-tac-toe using Minimax Algorithm implemented in typescript
 
 
-Board:
+Board initial state:
 ```text
 [
 	None, None, None
