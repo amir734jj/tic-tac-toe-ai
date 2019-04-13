@@ -8,7 +8,7 @@ import {TreeNode} from './models/nodes/TreeNode';
 async function main() {
   console.log('Started ...');
 
-  let board: IBoard = new Board(3);
+  let board: IBoard = new Board(10);
   console.log(board.toString());
 
   board = board

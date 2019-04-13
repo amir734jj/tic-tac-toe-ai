@@ -2,13 +2,17 @@ import * as lodash from 'lodash';
 import {PieceType} from '../models/enums/Type';
 import {IBoard} from '../models/interfaces/IBoard';
 import {Move} from '../models/Move';
-import {SimpleNode} from "../models/nodes/SimpleNode";
+import {SimpleNode} from '../models/nodes/SimpleNode';
 import {TreeNode} from '../models/nodes/TreeNode';
 import {TypePiecePosition} from '../models/types/PiecePosition';
 import {TestType} from '../models/types/TestType';
 import {boardTest} from './BoardLogic';
 
-function buildDecisionTreeForPieceTypeHelper(board: IBoard, selfType: PieceType, otherType: PieceType, depth: number, testResults: Map<IBoard, TestType>): TreeNode[] {
+function generateCacheKey(board: IBoard, selfType: PieceType, otherType: PieceType): string {
+  return `${board.hashCode()}${selfType}${otherType}`;
+}
+
+function buildDecisionTreeForPieceTypeHelper(board: IBoard, selfType: PieceType, otherType: PieceType, depth: number, testResults: Map<IBoard, TestType>, cache: Map<string, TreeNode[]>): TreeNode[] {
   const testResult = boardTest(board);
 
   testResults.set(board, testResult);
@@ -16,20 +20,30 @@ function buildDecisionTreeForPieceTypeHelper(board: IBoard, selfType: PieceType,
   if (testResult.flag) {
     return [];
   } else {
-    return board
-      .availablePositions()
-      .map((position: TypePiecePosition) => {
-        const move = new Move(position, selfType);
-        const updatedBoard = board.updatePiece(position.i, position.j, selfType);
-        const children = buildDecisionTreeForPieceTypeHelper(updatedBoard, otherType, selfType, depth + 1, testResults);
+    const cacheKey = generateCacheKey(board, selfType, otherType);
 
-        return new TreeNode(updatedBoard, move, testResults.get(updatedBoard), children);
-      });
+    if (cache.has(cacheKey)) {
+      return cache.get(cacheKey);
+    } else {
+      const result = board
+        .availablePositions()
+        .map((position: TypePiecePosition) => {
+          const move = new Move(position, selfType);
+          const updatedBoard = board.updatePiece(position.i, position.j, selfType);
+          const children = buildDecisionTreeForPieceTypeHelper(updatedBoard, otherType, selfType, depth + 1, testResults, cache);
+
+          return new TreeNode(updatedBoard, move, testResults.get(updatedBoard), children);
+        });
+
+      cache.set(cacheKey, result);
+
+      return result;
+    }
   }
 }
 
 export function buildDecisionTreeForPieceType(board: IBoard, selfType: PieceType, otherType: PieceType): TreeNode[] {
-  return buildDecisionTreeForPieceTypeHelper(board, selfType, otherType, 0, new Map<IBoard, TestType>());
+  return buildDecisionTreeForPieceTypeHelper(board, selfType, otherType, 0, new Map<IBoard, TestType>(), new Map<string, TreeNode[]>());
 }
 
 function shortestWinPathHelper(previous: TreeNode[], treeNode: TreeNode): TreeNode[] {

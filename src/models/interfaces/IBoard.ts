@@ -13,4 +13,6 @@ export interface IBoard {
   row(i: number): PieceType[];
 
   column(j: number): PieceType[];
+
+  hashCode() : string;
 }

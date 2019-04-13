@@ -4,6 +4,7 @@ import * as lodash from 'lodash';
 import {PieceType} from './enums/Type';
 import {IBoard} from './interfaces/IBoard';
 import {TypePiecePosition} from "./types/PiecePosition";
+import {genericHash} from "../utilities/GenericHash";
 
 type TypeMatrix = PieceType[][];
 
@@ -99,6 +100,14 @@ export class Board implements IBoard {
    */
   public toString(): string {
     return `[\n${this.matrix.map((x: PieceType[]) => `\t${x.map((y: PieceType) => EnumValues.getNameFromValue(PieceType, y)).join(", ")}`).join('\n')}\n]`;
+  }
+
+  /**
+   * Returns the hash of the board
+   * @returns {string}
+   */
+  public hashCode() : string {
+    return genericHash(this.matrix);
   }
 
   /**

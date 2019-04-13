@@ -20,6 +20,7 @@
     "immutable": "^4.0.0-rc.12",
     "jest": "~23.6.0",
     "lodash": "^4.17.11",
+    "md5": "^2.2.1",
     "prettier": "1.15.3",
     "rimraf": "^2.6.3",
     "ts-jest": "~23.10.5",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.123",
+    "@types/md5": "^2.1.33",
     "tslib": "~1.9.3"
   }
 }
