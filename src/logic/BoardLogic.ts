@@ -1,4 +1,3 @@
-import * as lodash from 'lodash';
 import {PieceType} from '../models/enums/Type';
 import {IBoard} from '../models/interfaces/IBoard';
 
@@ -134,10 +133,10 @@ export function boardTest(board: IBoard) : TestType {
     columnTest(board), rowTest(board), diagonalForwardTest(board), diagonalBackwardTest(board)
   ];
 
-  const result = lodash.find(testResults, (x: TestType) => x.flag);
+  const result = testResults.filter((x: TestType) => x.flag);
 
-  if (result) {
-    return result;
+  if (result.length > 0) {
+    return result[0];
   } else {
     return {
       flag: false,

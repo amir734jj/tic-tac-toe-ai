@@ -1,26 +1,17 @@
 import {PieceType} from '../models/enums/Type';
 import {IBoard} from '../models/interfaces/IBoard';
 import {Move} from '../models/Move';
+import {TreeNode} from "../models/TreeNode";
 import {TypePiecePosition} from '../models/types/PiecePosition';
-import {boardTest} from "./BoardLogic";
+import {boardTest} from './BoardLogic';
 
-class TreeNode {
-  private move: Move;
-  private children: TreeNode[];
+export function buildTreeForPieceType(board: IBoard, selfType: PieceType, otherType: PieceType, depthArg?: number): TreeNode[] {
+  let depth = depthArg;
 
-  constructor(move: Move, children: TreeNode[]) {
-    this.move = move;
-    this.children = children;
+  if (depth === undefined) {
+    depth = 0;
   }
 
-  public toString() {
-    return `${this.move.toString()}
-      children: 
-      ${this.children.map((x: TreeNode) => x.toString()).join('\n')}`;
-  }
-}
-
-function buildTreeForPieceType(board: IBoard, selfType: PieceType, otherType: PieceType, depth: number): TreeNode[] {
   const testResult = boardTest(board);
 
   if (testResult.flag) {
@@ -30,7 +21,8 @@ function buildTreeForPieceType(board: IBoard, selfType: PieceType, otherType: Pi
       .availablePositions()
       .map((position: TypePiecePosition) => {
         const move = new Move(position, selfType);
-        const children = buildTreeForPieceType(board, otherType, selfType, depth + 1);
+        const updatedBoard = board.updatePiece(position.i, position.j, selfType);
+        const children = buildTreeForPieceType(updatedBoard, otherType, selfType, depth + 1);
 
         return new TreeNode(move, children);
       });

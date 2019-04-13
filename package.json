@@ -2,7 +2,7 @@
   "name": "tic-tac-toe",
   "version": "1.0.0",
   "scripts": {
-    "go": "node build/src/driver",
+    "go": "node $NODE_DEBUG_OPTION build/src/driver",
     "clean": "rimraf coverage build tmp",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
