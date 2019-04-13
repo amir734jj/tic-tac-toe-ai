@@ -1,6 +1,8 @@
 # tic-tac-toe-ai
 AI for tic-tac-toe using Minimax Algorithm implemented in typescript
 
+#### Note
+Basically, this code creates a decision tree (which is inherently a graph!) with memoization and returns the shortest set of moves to win
 
 Board initial state:
 ```text
