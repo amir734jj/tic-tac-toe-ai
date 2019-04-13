@@ -4,7 +4,7 @@ AI for tic-tac-toe using Minimax Algorithm implemented in typescript
 #### Note
 Basically, this code creates a decision tree (which is inherently a graph!) with memoization and returns the shortest set of moves to win
 
-Board initial state:
+#### Board initial state:
 ```text
 [
 	None, None, None
@@ -13,7 +13,7 @@ Board initial state:
 ]
 ```
 
-Decision tree:
+#### Decision tree:
 ```text
 Attempt to set (0, 0) to Circle 
  children (depth: 0):
@@ -27,7 +27,7 @@ Attempt to set (0, 0) to Circle
         ...
 ```
 
-Shortest path to win:
+#### Shortest path to win:
 ```text
 Attempt to set (2, 2) to Circle 
 Attempt to set (2, 1) to Square 
