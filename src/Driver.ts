@@ -1,4 +1,4 @@
-import {buildTreeForPieceType} from "./logic/BoardPredication";
+import {buildDecisionTreeForPieceType, shortedWinPath} from "./logic/BoardPredication";
 import {Board} from "./models/Board";
 import {PieceType} from "./models/enums/Type";
 import {IBoard} from "./models/interfaces/IBoard";
@@ -18,9 +18,10 @@ async function main() {
     .updatePiece(1, 1, PieceType.None);
 
 
-  const tree = buildTreeForPieceType(board, PieceType.Circle, PieceType.Square);
+  const trees = buildDecisionTreeForPieceType(board, PieceType.Circle, PieceType.Square);
+  // const shortedWinPathResult = shortedWinPath(trees);
 
-  const result = tree.map((x: TreeNode) => x.toString()).join('\n');
+  const result = trees.map((x: TreeNode) => x.toString()).join('\n');
 
   console.log(result);
 }

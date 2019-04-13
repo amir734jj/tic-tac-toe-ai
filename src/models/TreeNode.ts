@@ -6,9 +6,9 @@ import {TestType} from "./types/TestType";
 
 export class TreeNode {
   public board: IBoard;
-  private move: Move;
-  private children: TreeNode[];
-  private testResult: TestType;
+  public testResult: TestType;
+  public children: TreeNode[];
+  public move: Move;
 
   constructor(board: IBoard, move: Move, children: TreeNode[], testResult: TestType) {
     this.board = board;
@@ -33,8 +33,17 @@ export class TreeNode {
       depth = 0;
     }
 
-    return `${this.move.toString()} ${this.testResult.flag ? `; won: ${EnumValues.getNameFromValue(PieceType, this.testResult.pieceType)}` : ''}
+    const printChildrenFunc = () => {
+      if (this.children.length) {
+        return `\n
 ${TreeNode.emptyString(depth)} children (depth: ${depth}):
 ${this.children.map((x: TreeNode) => `${TreeNode.emptyString(depth + 1)}${x.toString(depth + 1)}`).join('\n')}`;
+      } else {
+        return '';
+      }
+
+    };
+
+    return `${this.move.toString()} ${this.testResult.flag ? `; won: ${EnumValues.getNameFromValue(PieceType, this.testResult.pieceType)}` : ''}${printChildrenFunc()}`;
   }
 }
