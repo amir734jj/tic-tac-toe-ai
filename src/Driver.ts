@@ -1,6 +1,6 @@
+import {buildTreeForPieceType} from "./logic/BoardPredication";
 import {Board} from "./models/Board";
 import {PieceType} from "./models/enums/Type";
-import {buildTreeForPieceType} from "./logic/BoardPredication";
 import {IBoard} from "./models/interfaces/IBoard";
 import {TreeNode} from "./models/TreeNode";
 
